@@ -1,0 +1,31 @@
+Package: AccSamplingDesign
+Title: Acceptance Sampling Plans Design
+Version: 0.0.1
+Authors@R: 
+    c(person("Ha", "Truong", 
+           email = "truongvietha87@gmail.com",
+           role = c("aut", "cre", "cph")), 
+      person("Victor", "Miranda", role = c("ths", "rev")),  
+      person("Roger", "Kissling", role = c("ths", "rev"))  
+    )
+Description: Provides tools for designing and analyzing acceptance sampling plans.
+    Supports both attribute-based (Binomial and Poisson) and variable-based (Normal and Beta)
+    sampling, enabling quality control for fractional and compositional data.
+    Uses nonlinear programming (NLP) for sampling plan optimization, minimizing sample size
+    while balancing producer's and consumer's risks. Operating Characteristic (OC) curves
+    are available for plan visualization.
+License: GPL-3
+Encoding: UTF-8
+Imports: stats, methods
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
+URL: https://github.com/vietha/AccSamplingDesign
+BugReports: https://github.com/vietha/AccSamplingDesign/issues
+NeedsCompilation: no
+Packaged: 2025-04-29 09:28:34 UTC; hatruong
+Author: Ha Truong [aut, cre, cph],
+  Victor Miranda [ths, rev],
+  Roger Kissling [ths, rev]
+Maintainer: Ha Truong <truongvietha87@gmail.com>
+Repository: CRAN
+Date/Publication: 2025-04-30 15:10:10 UTC
