@@ -8,11 +8,7 @@ knitr::opts_chunk$set(
 library(AccSamplingDesign)
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  # Install from GitHub
-#  devtools::install_github("vietha/AccSamplingDesign")
-#  
-#  # Load package
-#  library(AccSamplingDesign)
+# devtools::install_github("vietha/AccSamplingDesign")
 
 ## -----------------------------------------------------------------------------
 plan_attr <- optAttrPlan(
