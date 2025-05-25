@@ -131,7 +131,7 @@ optVarPlan <- function(PRQ, CRQ, alpha = 0.05, beta = 0.10,
     
     # Compute sample size n
     n <- ((u_alpha + u_beta) / (u_p1 - u_p2))^2
-    # Compute acceptance constant k
+    # Compute acceptability constant k
     k <- (u_p1 * u_beta + u_p2 * u_alpha) / (u_alpha + u_beta)
 
     if(sigma_type == "unknown") {
@@ -250,9 +250,9 @@ optVarPlan <- function(PRQ, CRQ, alpha = 0.05, beta = 0.10,
     if(theta_type == "unknown") {
       
       ## This R ratio from paper of Govindaraju and Kissling (2015)
-      #R_ratio = (1 + 0.85*k^2)
+      R_ratio = (1 + 0.85*k^2)
       ## This R ration from my simulation
-      R_ratio = (1 + 0.5*k^2)
+      #R_ratio = (1 + 0.5*k^2)
       # By theoretically motivated adjustment 
       #R_ratio <- (1 + k^2)/2
       
@@ -281,7 +281,7 @@ optVarPlan <- function(PRQ, CRQ, alpha = 0.05, beta = 0.10,
       sample_size = ceiling(sample_size), # round up the sample size for practical;
       n = n, # we keep the number before round up
       m = m, # we keep the number before round up
-      k = round(k, 3)
+      k = k
     ), 
     class = "VarPlan"
   ))
@@ -300,7 +300,7 @@ plot.VarPlan <- function(x, pd = NULL, by = c("pd", "mean"), ...) {
     pa <- sapply(pd, function(p) accProb(x, p))
     plot(pd, pa, type = "l", col = "red", lwd = 2,
          main = paste0("Variables Sampling OC Curve by Pd",
-                       " | n=", x$sample_size, ", k=", x$k, " | ", x$distribution),
+                       " | n=", x$sample_size, ", k=", round(x$k,3), " | ", x$distribution),
          xlab = "Proportion Nonconforming", ylab = "P(accept)", ...)
     abline(v = c(x$PRQ, x$CRQ), lty = 2, col = "gray")
     abline(h = c(1 - x$PR, x$CR), lty = 2, col = "gray")
@@ -330,7 +330,7 @@ plot.VarPlan <- function(x, pd = NULL, by = c("pd", "mean"), ...) {
     pa <- sapply(pd, function(p) accProb(x, p))
     plot(mu_vals, pa, type = "l", col = "blue", lwd = 2,
          main = paste0("Variables Sampling OC Curve by Mean",
-                       " | n=", x$sample_size, ", k=", x$k, " | ", x$distribution),
+                       " | n=", x$sample_size, ", k=", round(x$k,3), " | ", x$distribution),
          xlab = "Process Mean", ylab = "P(accept)", ...)
     abline(v = c(mu_PRQ, mu_CRQ), lty = 2, col = "gray")
     abline(h = c(1 - x$PR, x$CR), lty = 2, col = "gray")
