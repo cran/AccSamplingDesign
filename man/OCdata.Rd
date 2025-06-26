@@ -7,6 +7,9 @@
   nonconforming items and the corresponding probability of acceptance, along 
   with plan-related metadata. This function supports both optimal plan objects 
   (e.g. found from \code{"optPlan()"} method) and custom plan parameter inputs.
+  
+  Accessor functions \code{paccept()}, \code{pd()}, and \code{process_means()} 
+  provide safe access to components of the \code{OCdata} object.
 }
 \usage{
 OCdata(plan = NULL, pd = NULL,
@@ -56,7 +59,7 @@ OCdata(plan = NULL, pd = NULL,
 }
 \details{
   The function evaluates the Operating Characteristic (OC) curve by computing the 
-  probability of acceptance across a range of proportions nonconforming (\code{pd}). 
+  probability of acceptance across a range of proportions of nonconforming items (\code{pd}). 
   This can be either directly specified or derived based on the plan inputs.
 
   If a \code{plan} object is supplied, it overrides the other input parameters 
@@ -77,13 +80,13 @@ OCdata(plan = NULL, pd = NULL,
   to corresponding mean levels.
 }
 \value{
-  An S4 object of class \code{"OCdata"} with the following slots:
+  For \code{OCdata}: an object of class \code{"OCdata"} (a list) with components:
 
   \tabular{ll}{
-    \code{pd} \tab Vector of proportions nonconforming (defective). \cr
-    \code{paccept} \tab Probability of acceptance at each level of nonconformance. \cr
-    \code{process_means} \tab Estimated mean values (only for variable plans with specification limits). \cr
-    \code{type} \tab Distribution type (\code{"binomial"}, \code{"poisson"}, \code{"normal"}, or \code{"beta"}). \cr
+    \code{pd} \tab Numeric vector of proportions of nonconforming items (defective). \cr
+    \code{paccept} \tab Numeric vector of probabilities of acceptance at each level of nonconformance. \cr
+    \code{process_means} \tab Numeric vector of estimated mean values (only for variable plans with specification limits). \cr
+    \code{dist} \tab Distribution type (\code{"binomial"}, \code{"poisson"}, \code{"normal"}, or \code{"beta"}). \cr
     \code{n} \tab Sample size used in the plan. \cr
     \code{k} \tab Acceptability constant (if applicable). \cr
     \code{c} \tab Acceptance number (if applicable). \cr
@@ -104,6 +107,7 @@ plan <- optVarPlan(
 
 # Generate OC data from optimal plan
 oc_data <- OCdata(plan, pd = seq(0, 0.15, by = 0.001))
+
 # Plot the OC curve
 plot(oc_data)
 
@@ -111,7 +115,7 @@ plot(oc_data)
 # Generate OC data from custom plan
 oc_data2 <- OCdata(n = 132, c = 5, distribution = "binomial", 
                    pd = seq(0, 0.15, by = 0.001))
+
 # Plot the OC curve
 plot(oc_data2)
-
 }
