@@ -6,6 +6,7 @@ knitr::opts_chunk$set(
   fig.height = 5
 )
 library(AccSamplingDesign)
+library(VGAM)
 
 ## -----------------------------------------------------------------------------
 # Create an attribute plan with binomial assumption
@@ -93,6 +94,27 @@ plan_beta2 <- optPlan(
 
 # Summary
 summary(plan_beta2)
+
+## -----------------------------------------------------------------------------
+plan_beta2$sample_size  # integer sample size used in plan
+plan_beta2$n            # raw computed (non-rounded) value
+
+## -----------------------------------------------------------------------------
+# Example data
+y <- c(0.75, 0.68, 0.72, 0.70, 0.76)
+
+# Fit Beta model
+fit <- vglm(y ~ 1, betaff, data = data.frame(y = y))
+
+# Extract estimated parameters
+coef(fit, matrix = TRUE)
+
+## -----------------------------------------------------------------------------
+theta_est <- exp(coef(fit, matrix = TRUE)[1, "loglink(phi)"])
+theta_est
+optPlan(PRQ = 0.05, CRQ = 0.20, alpha = 0.05, beta = 0.10,
+           USL = 0.8, distribution = "beta", theta_type = "unknown",
+           theta = theta_est)
 
 ## -----------------------------------------------------------------------------
 # Define range of defect rates

@@ -59,7 +59,16 @@ print.VarPlan <- function(x, ...) {
 summary.VarPlan <- function(object, ...) {
   cat("Variables Acceptance Sampling Plan\n")
   cat(" Distribution:", object$distribution, "\n")
-  cat(" Sample Size (n):", object$sample_size, "\n")
+  
+  #cat(" Sample Size (n):", object$sample_size, "\n")
+  # Show rounded sample size and raw n
+  if (!is.null(object$n) && object$n != object$sample_size) {
+    cat(" Sample Size (n, rounded up):", object$sample_size, 
+        " [raw n =", object$n, "]\n")
+  } else {
+    cat(" Sample Size (n):", object$sample_size, "\n")
+  }
+  
   cat(" Acceptability Constant (k):", round(object$k, 3), "\n")
   if(object$distribution == "normal") {
     cat(" Population Standard Deviation:", object$sigma_type, "\n")
@@ -72,7 +81,7 @@ summary.VarPlan <- function(object, ...) {
     cat(" Lower Specification Limit (LSL):", object$LSL, "\n")
   }
   if (!is.null(object$USL)) {
-    cat(" Uper Specification Limit (USL):", object$USL, "\n")
+    cat(" Upper Specification Limit (USL):", object$USL, "\n")
   }
   if(!is.null(object$measurement_error)) {
     cat(" Measurement Error:", object$measurement_error, "\n")
