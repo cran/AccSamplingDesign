@@ -206,7 +206,14 @@ optVarPlan <- function(PRQ, CRQ, alpha = 0.05, beta = 0.10,
       
       # Apply large penalty if constraints are violated
       penalty <- (pmax(PR - alpha, 0))^2 + (pmax(CR - beta, 0))^2 # smoother penalty 
-      return(n + 1e4 * penalty)   # (objective + penalty combined)
+      
+      # Check if constraints are satisfied
+      if (PR <= alpha && CR <= beta) {
+        return(n)  # Return actual objective if feasible
+      } else {
+        # Return very large number if constraints violated
+        return(n + 1e4 * penalty * 7)   # (objective + penalty combined)
+      }
     }
     
     # Get initial estimates using normal distribution
@@ -262,6 +269,8 @@ optVarPlan <- function(PRQ, CRQ, alpha = 0.05, beta = 0.10,
     if(theta_type == "unknown") {
       ## This R ratio from paper of Govindaraju and Kissling (2015)
       R_ratio = (1 + 0.85*k^2)
+      ## This edited ratio
+      #R_ratio = (1 + 0.4*k^2)
       n <- ceiling(n)*R_ratio
     }
     
