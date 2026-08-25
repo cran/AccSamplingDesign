@@ -7,7 +7,8 @@
 \usage{
 optVarPlan(PRQ, CRQ, alpha = 0.05, beta = 0.10, USL = NULL, LSL = NULL,
            distribution = c("normal", "beta"), sigma_type = c("known", "unknown"),
-           theta_type = c("known", "unknown"), sigma = NULL, theta = NULL)
+           theta_type = c("known", "unknown"), sigma = NULL, theta = NULL,
+           method = c("delta_mle", "delta_mom", "gk_adjustment"))
 }
 \arguments{
   \item{PRQ}{Producer Risk Quality (must be within valid range for the chosen distribution).}
@@ -32,6 +33,10 @@ optVarPlan(PRQ, CRQ, alpha = 0.05, beta = 0.10, USL = NULL, LSL = NULL,
   
   \item{theta}{Precision (dispersion) parameter for the beta distribution.
   If unknown, it can be estimated from historical data using functions such as \code{\link[VGAM]{betaff}}.}
+
+  \item{method}{Unknown-theta Beta method: \code{"delta_mle"} (default),
+  \code{"delta_mom"}, or \code{"gk_adjustment"}. It is only applicable when
+  \code{distribution = "beta"} and \code{theta_type = "unknown"}.}
 }
 \details{
   The function generates variable acceptance sampling plans based on specified producer and consumer risks and either a normal or beta distribution model.
@@ -51,6 +56,11 @@ optVarPlan(PRQ, CRQ, alpha = 0.05, beta = 0.10, USL = NULL, LSL = NULL,
   }
   Optimization for Beta plans is performed using \code{\link[stats]{optim}} with the \code{"L-BFGS-B"} method 
   (Byrd et al., 1995) to handle bounds on sample size and acceptance numbers.
+
+  For unknown precision, Delta--MLE uses inverse expected Fisher information
+  and Delta--MoM uses analytical covariance propagated from the first four Beta
+  raw moments. The Govindaraju--Kissling adjustment retains the package's
+  earlier sample-size approximation.
   
   This approach ensures stable and efficient plan calculation while relying solely on base R functionality.
 }
@@ -63,6 +73,11 @@ optVarPlan(PRQ, CRQ, alpha = 0.05, beta = 0.10, USL = NULL, LSL = NULL,
   \item{n}{Unrounded sample size.}
 }
 \references{
+  * H. Truong, V. Miranda and R. Kissling (2026).
+  AccSamplingDesign: An R Package for Optimizing Acceptance Sampling Plans.
+  \emph{The R Journal}, 18(1), 368--381.
+  \doi{10.32614/RJ-2026-007}.
+
   * ISO 3951-1:2013 - Sampling procedures for inspection by variables.
   
   * Wilrich, PT. (2004). Single Sampling Plans for Inspection by Variables under a Variance Component Situation. In: Lenz, HJ., Wilrich, PT. (eds) Frontiers in Statistical Quality Control 7. Physica, Heidelberg.

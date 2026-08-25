@@ -89,6 +89,7 @@ plan_beta2 <- optPlan(
   distribution = "beta",
   theta = 44000000,
   theta_type = "unknown",
+  method = "delta_mle",
   LSL = 0.00001
 )
 

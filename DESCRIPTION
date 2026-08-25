@@ -1,6 +1,6 @@
 Package: AccSamplingDesign
 Title: Acceptance Sampling Plans Design
-Version: 0.0.8
+Version: 0.0.9
 Authors@R: 
     c(person("Ha", "Truong", 
            email = "truongvietha87@gmail.com",
@@ -17,16 +17,18 @@ Description: Provides tools for designing and analyzing Acceptance Sampling plan
 License: GPL-3
 Encoding: UTF-8
 Imports: stats, methods
-Suggests: VGAM, knitr, rmarkdown
+Suggests: VGAM, knitr, rmarkdown, testthat (>= 3.0.0)
+Config/testthat/edition: 3
 VignetteBuilder: knitr
-URL: https://github.com/vietha/AccSamplingDesign
+URL: https://github.com/vietha/AccSamplingDesign,
+        https://doi.org/10.32614/RJ-2026-007
 BugReports: https://github.com/vietha/AccSamplingDesign/issues
 RoxygenNote: 7.3.2
 NeedsCompilation: no
-Packaged: 2026-02-20 08:26:10 UTC; hatruong
+Packaged: 2026-08-25 01:07:52 UTC; hatruong
 Author: Ha Truong [aut, cre, cph],
   Victor Miranda [ths, rev],
   Roger Kissling [ths, rev]
 Maintainer: Ha Truong <truongvietha87@gmail.com>
 Repository: CRAN
-Date/Publication: 2026-02-20 10:30:26 UTC
+Date/Publication: 2026-08-25 07:00:18 UTC
