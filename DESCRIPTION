@@ -1,6 +1,6 @@
 Package: AccSamplingDesign
 Title: Acceptance Sampling Plans Design
-Version: 0.0.9
+Version: 0.1.0
 Authors@R: 
     c(person("Ha", "Truong", 
            email = "truongvietha87@gmail.com",
@@ -25,10 +25,10 @@ URL: https://github.com/vietha/AccSamplingDesign,
 BugReports: https://github.com/vietha/AccSamplingDesign/issues
 RoxygenNote: 7.3.2
 NeedsCompilation: no
-Packaged: 2026-08-25 01:07:52 UTC; hatruong
+Packaged: 2026-10-01 23:31:25 UTC; hatruong
 Author: Ha Truong [aut, cre, cph],
   Victor Miranda [ths, rev],
   Roger Kissling [ths, rev]
 Maintainer: Ha Truong <truongvietha87@gmail.com>
 Repository: CRAN
-Date/Publication: 2026-08-25 07:00:18 UTC
+Date/Publication: 2026-10-01 23:50:02 UTC
