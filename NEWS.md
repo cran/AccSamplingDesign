@@ -1,3 +1,51 @@
+# AccSamplingDesign 0.1.3 (development build)
+
+- Saddlepoint-MLE plan search now starts from the delivered Delta-MLE sample
+  size and acceptance constant. If that initializer fails validation, the
+  previous Normal initializer is used automatically.
+- The initializer affects search efficiency only. All final probabilities,
+  feasibility decisions, adjacent-size checks, and reported risks continue to
+  use the saddlepoint MLE OC.
+- Search diagnostics now report the initializer, fallback reason, evaluated
+  sample sizes, and distribution constructions. The public method names and
+  defaults are unchanged; `delta_mle` remains the default.
+- Validation found equivalent delivered plans in all 43 commonly supported
+  configurations. Timing improved overall but remained configuration-dependent.
+
+# AccSamplingDesign 0.1.2 (development build)
+
+- Added opt-in `saddlepoint_mom`, displayed as Saddlepoint MOM OC with an
+  experimental/incomplete-validation label. The estimator and rule are unchanged.
+- Connected integer plan search, manual plans, acceptance probabilities,
+  summaries, OC data, and plots. Successful calculations require both integration
+  refinement and population-CGF quadrature checks. Unsupported calculations
+  return explicit errors, including ordinary cases that failed development tests.
+- This integration does not certify MOM accuracy or risk control. No tolerance
+  was relaxed, and no MLE/Delta substitute was introduced. `delta_mle` remains
+  the default; existing method formulas and reporting conventions are preserved.
+
+# AccSamplingDesign 0.1.1
+
+## Experimental method
+
+- Added opt-in `method = "saddlepoint_mle"` for unknown-precision Beta
+  variables plans. It numerically integrates a normalized joint saddlepoint
+  approximation to the same MLE inspection rule. `delta_mle` remains the default.
+- New saddlepoint plans use integer sample sizes, verify their own numerical
+  analytical risk constraints, and expose integration diagnostics. They do not
+  provide a guarantee of finite-sample risk control or global size minimality.
+- Numerical integration uses no simulation, has an initial setup cost, and caches
+  a distribution for repeated acceptance-constant calculations. Unsupported or
+  nonconvergent calculations raise errors; no Delta fallback is used.
+
+## MLE safety fixes
+
+- Delta-MLE construction and evaluation reject invalid sample sizes below two,
+  nonfinite parameters, and negative acceptability constants. MLE refinement now
+  respects the size bound and rejects analytically infeasible results.
+- The Delta formulas and existing Delta/Govindaraju-Kissling reporting conventions
+  are unchanged. The MOM implementation is unchanged.
+
 # AccSamplingDesign 0.0.9.9000
 
 ## Bug fixes

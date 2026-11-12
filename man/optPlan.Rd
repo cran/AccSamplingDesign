@@ -12,7 +12,8 @@ optPlan(PRQ, CRQ, alpha = 0.05, beta = 0.10, USL = NULL, LSL = NULL,
         sigma_type = c("known", "unknown"),
         theta_type = c("known", "unknown"),
         sigma = NULL, theta = NULL,
-        method = c("delta_mle", "delta_mom", "gk_adjustment"))
+        method = c("delta_mle", "delta_mom", "gk_adjustment",
+                   "saddlepoint_mle", "saddlepoint_mom"))
 }
 \arguments{
   \item{PRQ}{Producer's risk quality level (e.g., acceptable quality level).}
@@ -29,9 +30,32 @@ optPlan(PRQ, CRQ, alpha = 0.05, beta = 0.10, USL = NULL, LSL = NULL,
   If unknown, it can be estimated from historical data using functions such as \code{\link[VGAM]{betaff}}.}
   \item{method}{Method for a Beta plan with \code{theta_type = "unknown"}:
   \code{"delta_mle"} (default), \code{"delta_mom"}, or
-  \code{"gk_adjustment"}. It must not be supplied in other cases.}
+  \code{"gk_adjustment"}, or experimental \code{"saddlepoint_mle"} and \code{"saddlepoint_mom"}.
+  It must not be supplied in other cases.}
 }
 \details{
+  The experimental \code{"saddlepoint_mom"} method uses the joint sample
+  moments, the finite-integer-sample moment support, and the unchanged MOM
+  inspection rule. Its numerical and finite-sample validation is incomplete:
+  ordinary settings can be unsupported. Unsupported integrations or searches
+  raise an error and do not return a substitute probability or plan. Population
+  quadrature orders 128 and 256 and integration refinements must agree within
+  0.00002. A conservative log-concavity check on the tilted logit-integration
+  kernel also rejects cases with unresolved remote tilted mass; rejected nodes
+  are not omitted and renormalized. This numerical discrepancy is not a statistical risk bound. Integer
+  plan searches check working risks and adjacent sizes; global minimality is
+  not established. The method is slower than the Delta methods and caches
+  successful and failed population calculations. The default remains
+  \code{"delta_mle"}.
+
+The experimental \code{"saddlepoint_mle"} method integrates a normalized joint
+MLE saddlepoint density. It uses deterministic numerical integration, not
+simulation, and retains the MLE inspection rule. Its initial cost is larger
+than the Delta methods. Returned risks are numerical approximations at the
+delivered integer size, not guarantees of finite-sample risk control.
+Nonconvergent integration raises an error; no alternative OC is substituted.
+See \code{\link{optVarPlan}} for details.
+
 This function designs optimal acceptance sampling plans by balancing producer's 
 and consumer's risks under specified quality levels. It supports plans for 
 attributes (binomial) and variables (normal or beta distributions), including 

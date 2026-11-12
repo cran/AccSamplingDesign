@@ -8,7 +8,8 @@
 optVarPlan(PRQ, CRQ, alpha = 0.05, beta = 0.10, USL = NULL, LSL = NULL,
            distribution = c("normal", "beta"), sigma_type = c("known", "unknown"),
            theta_type = c("known", "unknown"), sigma = NULL, theta = NULL,
-           method = c("delta_mle", "delta_mom", "gk_adjustment"))
+           method = c("delta_mle", "delta_mom", "gk_adjustment",
+                      "saddlepoint_mle", "saddlepoint_mom"))
 }
 \arguments{
   \item{PRQ}{Producer Risk Quality (must be within valid range for the chosen distribution).}
@@ -35,10 +36,25 @@ optVarPlan(PRQ, CRQ, alpha = 0.05, beta = 0.10, USL = NULL, LSL = NULL,
   If unknown, it can be estimated from historical data using functions such as \code{\link[VGAM]{betaff}}.}
 
   \item{method}{Unknown-theta Beta method: \code{"delta_mle"} (default),
-  \code{"delta_mom"}, or \code{"gk_adjustment"}. It is only applicable when
+  \code{"delta_mom"}, \code{"gk_adjustment"}, or experimental \code{"saddlepoint_mle"} and \code{"saddlepoint_mom"}.
+  It is only applicable when
   \code{distribution = "beta"} and \code{theta_type = "unknown"}.}
 }
 \details{
+  The experimental \code{"saddlepoint_mom"} method uses the joint sample
+  moments, the finite-integer-sample moment support, and the unchanged MOM
+  inspection rule. Its numerical and finite-sample validation is incomplete:
+  ordinary settings can be unsupported. Unsupported integrations or searches
+  raise an error and do not return a substitute probability or plan. Population
+  quadrature orders 128 and 256 and integration refinements must agree within
+  0.00002. A conservative log-concavity check on the tilted logit-integration
+  kernel also rejects cases with unresolved remote tilted mass; rejected nodes
+  are not omitted and renormalized. This numerical discrepancy is not a statistical risk bound. Integer
+  plan searches check working risks and adjacent sizes; global minimality is
+  not established. The method is slower than the Delta methods and caches
+  successful and failed population calculations. The default remains
+  \code{"delta_mle"}.
+
   The function generates variable acceptance sampling plans based on specified producer and consumer risks and either a normal or beta distribution model.
 
   The specification limit must be defined via either \code{USL} (upper specification limit) or \code{LSL} (lower specification limit), depending on whether the one-sided quality criterion concerns the upper or lower tail. Only one limit should be provided.
@@ -65,6 +81,19 @@ optVarPlan(PRQ, CRQ, alpha = 0.05, beta = 0.10, USL = NULL, LSL = NULL,
   and Delta--MoM uses analytical covariance propagated from the first four Beta
   raw moments. The Govindaraju--Kissling adjustment retains the package's
   earlier sample-size approximation.
+
+  The experimental \code{"saddlepoint_mle"} method constructs a positive joint
+  approximation to the fitted Beta mean and precision, including the parameter
+  transformation Jacobian, then numerically normalizes and integrates it over
+  the existing acceptance region. No simulation is used in its OC or optimization.
+  The distribution is reused across acceptance constants. It is slower than
+  Delta evaluation. Unsupported or nonconvergent integrations raise errors.
+
+  Saddlepoint plans use an integer size, choose the midpoint of the feasible
+  acceptance-constant interval, and verify both numerical risk constraints.
+  Adjacent smaller integer feasibility is checked; global sample-size minimality
+  is not guaranteed. The numerical diagnostics do not bound the statistical
+  approximation error, and finite-sample risk control is not guaranteed.
   
   This approach ensures stable and efficient plan calculation while relying solely on base R functionality.
 }
@@ -75,10 +104,18 @@ optVarPlan(PRQ, CRQ, alpha = 0.05, beta = 0.10, USL = NULL, LSL = NULL,
   \item{sample_size}{Final sample size after rounding up to the next integer, for practical application.}
   \item{k}{Acceptability constant.}
   \item{n}{The sample size the plan is evaluated at. For known-theta Beta
-  plans this is the delivered integer size (equal to \code{sample_size});
+  plans and \code{"saddlepoint_mle"} this is the delivered integer size
+  (equal to \code{sample_size});
   for other plans it is the unrounded value from the optimization.}
+  \item{integration}{For saddlepoint plans, experimental status, estimated
+  numerical convergence error and quadrature order at the two design points.}
+  \item{n_continuous}{For saddlepoint plans, the continuous size used to locate
+  the integer search neighbourhood.}
 }
 \references{
+  P. McCullagh. \emph{Tensor Methods in Statistics}, Chapter 6.
+  \url{https://www.stat.uchicago.edu/~pmcc/tensorbook/edition2.pdf}
+
   * H. Truong, V. Miranda and R. Kissling (2026).
   AccSamplingDesign: An R Package for Optimizing Acceptance Sampling Plans.
   \emph{The R Journal}, 18(1), 368--381.
